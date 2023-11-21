@@ -80,13 +80,15 @@ export default{
       axios.post('http://127.0.0.1:8000/api/students',this.model.student)
         .then( res => {
           console.log(res.data)
-          alert(res.data.message)
+          alert(res.data.Message)
           this.model.student = {
             name:'',
             course:'',
             email:'',
             phone:'' 
           }
+          this.errors = '';
+          this.$router.push({name:"students"})
         }).catch(function (error){
           if(error.response){
             if(error.response.status == 422){
