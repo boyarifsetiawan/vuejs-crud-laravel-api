@@ -25,7 +25,7 @@
             <td>{{ student.email }}</td>
             <td>{{ student.phone }}</td>
             <td>
-              <RouterLink to="#" class="btn btn-warning mx-3">Edit</RouterLink>
+              <RouterLink :to="{path: '/students/'+student.id+'/edit'}" class="btn btn-warning mx-3">Edit</RouterLink>
               <button class="btn btn-danger">Delete</button>
             </td>
           </tr>

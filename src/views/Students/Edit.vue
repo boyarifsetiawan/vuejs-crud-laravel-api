@@ -2,15 +2,9 @@
   <div class="container mt-5">
     <div class="card">
       <div class="card-header"> 
-        <h4>Create Student</h4>
+        <h4>Edit Student</h4>
       </div>
-      <div class="card-body">
-        <!-- <p v-if="Object.keys(errorList).length > 0">
-          <b>Please correct the following error(s):</b>
-          <ul>
-            <li v-for="(error, index) in errorList" :key="index">{{ error[0] }}</li>
-          </ul>
-        </p> -->
+       <div class="card-body">
         <div class="mb-3 row">
           <label class="col-sm-2 col-form-label">Name</label>
           <div class="col-sm-10">
@@ -49,7 +43,7 @@
         </div>
         <hr>
         <div class="mb-5">
-          <button @click="saveStudent" class="btn btn-success float-start">Add</button>
+          <button @click="updateStudent(this.$route.params.id)" class="btn btn-success float-start">Update</button>
           <RouterLink to="/students" class="btn btn-danger float-start mx-4">Cancel</RouterLink>
         </div>
       </div>
@@ -60,9 +54,9 @@
 <script>
 import axios from 'axios';
 export default{
-  name:'studentCreate',
-  data(){
-    return{
+  name:'studentEdit',
+  data()  {
+    return  {
       errors: '',
       model:{
         student:{
@@ -74,33 +68,48 @@ export default{
       }
     }
   },
+  mounted(){
+    // console.log(this.$route.params.id)
+    this.showStudent(this.$route.params.id)
+  },
   methods:{
-    saveStudent(){
+    showStudent(id){
+      // var self = this
+      axios.get(`http://127.0.0.1:8000/api/students/${id}/edit`)
+        .then( res => {
+          this.model.student = res.data.data
+          console.log(res.data.message)
+        }).catch(function (error){
+          if(error.response){
+            if(error.response.status == 404 ){
+              alert(error.response.data.message)
+            }
+          }
+        })
+      },
+
+    updateStudent(id){
       var self = this
-      axios.post('http://127.0.0.1:8000/api/students',this.model.student)
+      axios.put(`http://127.0.0.1:8000/api/students/${id}/edit`,this.model.student)
         .then( res => {
 
           console.log(res.data)
           alert(res.data.message)
 
-          this.model.student = {
-            name:'',
-            course:'',
-            email:'',
-            phone:'' 
-          }
-
           this.errors = '';
           this.$router.push({name:"students"})
           
         }).catch(function (error){
-
+          console.log(error.response.message)
           if(error.response){
+            if(error.response.status == 404){
+              console.log(error.response.Message)
+            }
             if(error.response.status == 422){
 
-              console.log(error.response.data.errors)
+              console.log(error.response.data)
               self.errors = error.response.data.errors
-
+              
             }
           }
         })
