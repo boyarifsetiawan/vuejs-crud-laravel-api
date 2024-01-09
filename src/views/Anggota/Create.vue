@@ -1,0 +1,117 @@
+<template>
+  <div class="container mt-5">
+    <div class="card">
+      <div class="card-header"> 
+        <h4>Create Anggota</h4>
+      </div>
+      <div class="card-body">
+        <div class="mb-3 row">
+          <label class="col-sm-2 col-form-label">ID Anggota</label>
+          <div class="col-sm-10">
+            <input type="text" v-model="model.anggota.id_anggota" class="form-control">
+            <div v-if="errors.id_anggota">
+              <span class="badge text-bg-danger fst-italic">{{ errors.id_anggota[0] }}</span>
+            </div>
+          </div>
+        </div>
+        <div class="mb-3 row">
+          <label class="col-sm-2 col-form-label">Nama</label>
+          <div class="col-sm-10">
+            <input type="text" v-model="model.anggota.nama" class="form-control">
+            <div v-if="errors.nama">
+              <span class="badge text-bg-danger fst-italic">{{ errors.nama[0] }}</span>
+            </div>
+          </div>
+        </div>
+        <div class="mb-3 row">
+          <label class="col-sm-2 col-form-label">Jenis Kelamin</label>
+          <div class="col-sm-10">
+            <select class="form-select" v-model="model.anggota.jenis_kelamin">
+              <option value="pria">Pria</option>
+              <option value="wanita">Wanita</option>
+            </select>
+            <div v-if="errors.jenis_kelamin">
+              <span class="badge text-bg-danger fst-italic">{{ errors.jenis_kelamin[0] }}</span>
+            </div>
+          </div>
+        </div>
+        <div class="mb-3 row">
+          <label class="col-sm-2 col-form-label">Alamat</label>
+          <div class="col-sm-10">
+            <input type="text" v-model="model.anggota.alamat" class="form-control">
+            <div v-if="errors.alamat">
+              <span class="badge text-bg-danger fst-italic">{{ errors.alamat[0] }}</span>
+            </div>
+          </div>
+        </div>
+        <div class="mb-3 row">
+          <label class="col-sm-2 col-form-label">Status</label>
+          <div class="col-sm-10">
+            <input type="text" v-model="model.anggota.status" class="form-control">
+            <div v-if="errors.status">
+              <span class="badge text-bg-danger fst-italic">{{ errors.status[0] }}</span>
+            </div>
+          </div>
+        </div>
+        <div class="mb-5">
+          <button @click="saveAnggota" class="btn btn-success float-start">Add</button>
+          <RouterLink to="/anggota" class="btn btn-danger float-start mx-4">Cancel</RouterLink>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+import axios from 'axios';
+export default{
+  name:'AnggotaCreate',
+  data(){
+    return{
+      errors: '',
+      model:{
+        anggota:{
+          id_anggota:'',
+          nama:'',
+          jenis_kelamin:'',
+          alamat:'',
+          status:''
+        }
+      }
+    }
+  },
+  methods:{
+    saveAnggota(){
+      var self = this
+      axios.post('http://127.0.0.1:8000/api/anggota',this.model.anggota)
+        .then( res => {
+
+          console.log(res.data)
+          alert(res.data.message)
+
+          this.model.anggota = {
+            id_anggota:'',
+            nama:'',
+            jenis_kelamin:'',
+            alamat:'',
+            status:'' 
+          }
+
+          this.errors = '';
+          this.$router.push({name:"anggota"})
+          
+        }).catch(function (error){
+
+          if(error.response){
+            if(error.response.status == 422){
+
+              console.log(error.response.data.errors)
+              self.errors = error.response.data.errors
+
+            }
+          }
+        })
+    }
+  }
+}
+</script>
