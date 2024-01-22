@@ -17,25 +17,33 @@
         <div class="mb-3 row">
           <label class="col-sm-2 col-form-label">ID Anggota</label>
           <div class="col-sm-10">
-            <input type="text" v-model="model.transaksi.id_anggota" class="form-control">
-            <div v-if="errors.id_anggota">
-              <span class="badge text-bg-danger fst-italic">{{ errors.id_anggota[0] }}</span>
+            <select class="form-select" v-model="model.transaksi.anggota_id">
+              <option v-for="anggota in anggotas" :key="anggota.id" :value="anggota.id">
+                {{ anggota.id_anggota }}
+              </option>
+            </select>
+            <div v-if="errors.anggota_id">
+              <span class="badge text-bg-danger fst-italic">{{ errors.anggota_id[0] }}</span>
             </div>
           </div>
         </div>
         <div class="mb-3 row">
           <label class="col-sm-2 col-form-label">ID Buku</label>
           <div class="col-sm-10">
-            <input type="text" v-model="model.transaksi.id_buku" class="form-control">
-            <div v-if="errors.id_buku">
-              <span class="badge text-bg-danger fst-italic">{{ errors.id_buku[0] }}</span>
+            <select class="form-select" v-model="model.transaksi.buku_id">
+              <option v-for="buku in books" :key="buku.id" :value="buku.id">
+                {{ buku.id_buku }}
+              </option>
+            </select>
+            <div v-if="errors.buku_id">
+              <span class="badge text-bg-danger fst-italic">{{ errors.buku_id[0] }}</span>
             </div>
           </div>
         </div>
         <div class="mb-3 row">
           <label class="col-sm-2 col-form-label">Tgl Peminjaman</label>
           <div class="col-sm-10">
-            <input type="text" v-model="model.transaksi.tgl_peminjaman" class="form-control">
+            <input type="datetime-local" v-model="model.transaksi.tgl_peminjaman" class="form-control">
             <div v-if="errors.tgl_peminjaman">
               <span class="badge text-bg-danger fst-italic">{{ errors.tgl_peminjaman[0] }}</span>
             </div>
@@ -44,7 +52,7 @@
         <div class="mb-3 row">
           <label class="col-sm-2 col-form-label">Tgl Pengembalian</label>
           <div class="col-sm-10">
-            <input type="text" v-model="model.transaksi.tgl_pengembalian" class="form-control">
+            <input type="datetime-local" v-model="model.transaksi.tgl_pengembalian" class="form-control">
             <div v-if="errors.tgl_pengembalian">
               <span class="badge text-bg-danger fst-italic">{{ errors.tgl_pengembalian[0] }}</span>
             </div>
@@ -66,19 +74,37 @@ export default{
   data(){
     return{
       errors: '',
+      data:'',
+      books:'',
+      anggotas:'',
       model:{
         transaksi:{
           id_transaksi:'',
-          id_anggota:'', 
-          id_buku:'', 
+          anggota_id:'', 
+          buku_id:'', 
           tgl_peminjaman:'', 
           tgl_pengembalian:''
         }
       }
     }
   },
+  mounted(){
+    this.getBookAnggota()
+  }
+  ,
   methods:{
-
+    getBookAnggota(){
+      var my = this
+      axios.get('http://127.0.0.1:8000/api/bookandanggota').then( res => {
+        console.log(res.data)
+        this.books = res.data.books
+        this.anggotas = res.data.anggotas
+      }).catch(function (error){
+        my.data = error.response.data.message
+        alert(error.response.data.message)
+        console.log(error.response.data.message)
+      })
+    },
     saveTransaksi(){
       var self = this
       axios.post('http://127.0.0.1:8000/api/transaksi',this.model.transaksi)
@@ -89,8 +115,8 @@ export default{
 
           this.model.transaksi = {
             id_transaksi:'',
-            id_anggota:'', 
-            id_buku:'', 
+            anggota_id:'', 
+            buku_id:'', 
             tgl_peminjaman:'', 
             tgl_pengembalian:'' 
           }

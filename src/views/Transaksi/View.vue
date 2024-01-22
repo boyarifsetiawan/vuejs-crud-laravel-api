@@ -22,8 +22,8 @@
           <tr v-for="(item, index) in this.transaksi" :key="index">
             <td>{{ ++index }}</td>
             <td>{{ item.id_transaksi }}</td>
-            <td>{{ item.id_anggota }}</td>
-            <td>{{ item.id_buku }}</td>
+            <td>{{ item.anggota.id_anggota }}</td>
+            <td>{{ item.book.id_buku }}</td>
             <td>{{ item.tgl_peminjaman }}</td>
             <td>{{ item.tgl_pengembalian }}</td>
             <td>
