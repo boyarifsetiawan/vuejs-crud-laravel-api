@@ -77,13 +77,15 @@ export default{
       })
     },
     deleteUser(id){
-      console.log(id)
-      axios.delete(`http://127.0.0.1:8000/api/users/${id}`).then( res => {
-        confirm('Are you sure ?')
-        alert(res.data.message)
-        this.getUsers()
-        console.log(res.data.message)
-      })
+      if(confirm("Are you sure to delete this user ?")){
+                axios.delete(`http://127.0.0.1:8000/api/users/${id}`).then(res=>{
+                  this.getUsers()
+                  alert(res.data.message)
+                  console.log(res.data.message)
+                }).catch(error=>{
+                    console.log(error)
+                })
+            }
     }
   }
 }

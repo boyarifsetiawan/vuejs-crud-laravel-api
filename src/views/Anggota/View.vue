@@ -34,8 +34,8 @@
         </tbody>
         <tbody v-else-if="this.data.length > 0">
           <tr>
-            <td colspan="6">Books Not Found <br>
-              <RouterLink to="/books/create" class="btn btn-primary mt-3">Create Book Now</RouterLink>
+            <td colspan="6">Anggota Not Found <br>
+              <RouterLink to="/anggota/create" class="btn btn-primary mt-3">Create Anggota Now</RouterLink>
             </td>
           </tr>
         </tbody>
@@ -79,13 +79,15 @@ export default{
       })
     },
     deleteAnggota(id){
-      console.log(id)
-      axios.delete(`http://127.0.0.1:8000/api/anggota/${id}`).then( res => {
-        confirm('Are you sure ?')
-        alert(res.data.message)
-        this.getAnggota()
-        console.log(res.data.message)
-      })
+      if(confirm("Are you sure to delete this anggota ?")){
+                axios.delete(`http://127.0.0.1:8000/api/anggota/${id}`).then(res=>{
+                  this.getAnggota()
+                  alert(res.data.message)
+                  console.log(res.data.message)
+                }).catch(error=>{
+                    console.log(error)
+                })
+            }
     }
   }
 }

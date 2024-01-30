@@ -12,15 +12,23 @@ import TransaksiView from '../views/Transaksi/View.vue'
 import TransaksiCreate from '../views/Transaksi/Create.vue'
 import TransaksiEdit from '../views/Transaksi/Edit.vue'
 
-import UsersView from '../views/users/View.vue'
-import UserCreate from '../views/Users/Create.vue'
-import UserEdit from '../views/Users/Edit.vue'
+// import UsersView from '../views/Users/View.vue'
+// import UserCreate from '../views/Users/Create.vue'
+// import UserEdit from '../views/Users/Edit.vue'
 
-// import LoginForm from '../views/Login.vue'
+import LoginForm from '../views/Auth/Login.vue'
+import RegisterForm from '../views/Auth/Register.vue'
+import Home from '../views/Home.vue'
+import notFound from '../views/notFound.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
+    {
+      path: '/',
+      name: 'home',
+      component: Home
+    },
     //BOOKS
     {
       path: '/books',
@@ -35,7 +43,7 @@ const router = createRouter({
     {
       path: '/books/:id/edit',
       name: 'books.edit',
-      component: BookEdit
+      component: BookEdit,
     },
 
     // ANGGOTA
@@ -73,28 +81,37 @@ const router = createRouter({
     },
 
     // USER
-    {
-      path: '/users',
-      name: 'users',
-      component: UsersView
-    },
-    {
-      path: '/users/create',
-      name: 'users.create',
-      component: UserCreate
-    },
-    {
-      path: '/users/:id/edit',
-      name: 'users.edit',
-      component: UserEdit
-    },
+    // {
+    //   path: '/users',
+    //   name: 'users',
+    //   component: UsersView
+    // },
+    // {
+    //   path: '/users/create',
+    //   name: 'users.create',
+    //   component: UserCreate
+    // },
+    // {
+    //   path: '/users/:id/edit',
+    //   name: 'users.edit',
+    //   component: UserEdit
+    // },
 
     //login
-    // {
-    //   path: '/login',
-    //   name: 'login',
-    //   component: LoginForm
-    // },
+    {
+      path: '/login',
+      name: 'login',
+      component: LoginForm
+    },
+    {
+      path: '/register',
+      name: 'register',
+      component: RegisterForm
+    },
+    {
+      path: '/:pathMatch(.*)*',
+      component: notFound
+    }
   ]
 })
 
